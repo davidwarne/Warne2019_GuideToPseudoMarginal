@@ -1,4 +1,4 @@
-# Julia Code Examples of Pseuo-marginal methods fro computational inferens
+# Julia Code Examples of Pseudo-marginal methods for computational inference
 
 This repository contains useful example Julia functions and scripts as an introduction to 
 pseudo-marginal methods for inference on biochemical reaction networks using the
@@ -18,7 +18,7 @@ Google Scholar: (https://scholar.google.com.au/citations?user=t8l-kuoAAAAJ&hl=en
 This code is provided as supplementary information to the paper,
 
 David J Warne, Ruth E Baker, and Matthew J Simpson. A practical guide to 
-pseudo-marginal methods for computational inference. ArXiv pre-print, TBA. 
+pseudo-marginal methods for computational inference in systems biology. ArXiv pre-print, [TBA](www.arxiv.org). 
 
 ## Licensing
 This source code is licensed under the GNU General Public License Version 3.
@@ -36,6 +36,23 @@ Copyright (C) 2019 David J. Warne
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+## Requirements
+
+The following list contains the Julia version and required Modules used by this
+project. Older or newer versions may work, but this has not been tested.
+
+1. [Julia](https://github.com/JuliaLang/julia/tree/v1.2.0)            version 1.2.0
+2. [PyPlot](https://github.com/JuliaPy/PyPlot.jl/tree/v2.8.2)           version 2.8.2
+3. [LaTeXStrings](https://github.com/stevengj/LaTeXStrings.jl/tree/v1.0.3)     version 1.0.3
+4. [Distributions](https://github.com/JuliaStats/Distributions.jl/tree/v0.21.10)    version 0.21.1
+5. [StatsBase](https://github.com/JuliaStats/StatsBase.jl/tree/v0.32.0)        version 0.32.0
+6. [QuadGK](https://github.com/JuliaMath/QuadGK.jl/tree/v2.1.0)           version 2.1.0
+7. [KernelDensity](https://github.com/JuliaStats/KernelDensity.jl/tree/v0.5.1)    version 0.5.1
+8. [JLD2](https://github.com/JuliaIO/JLD2.jl/tree/v0.1.3)             version 0.1.3
+
+For instructions to install Julia and Modules see,
+[Julia Download and Installation](https://julialang.org/downloads/) and [Julia Documentation](https://docs.julialang.org/en/v1.2/manual/getting-started/)
 
 ## Contents
 
@@ -70,20 +87,7 @@ The directory structure is as follows
     |-- plotMichMentMCMCconv.jl
     |-- plotSchloglMCMCconv.jl
 ```
-
-## Requirements
-
-The following list contains the Julia version and required Modules used by this
-project. Older or newer versions may work, but this has not been tested.
-
-1. Julia            version 1.2.0
-2. PyPlot           version 2.8.2
-3. LaTeXStrings     version 1.0.3
-4. Distributions    version 0.21.1
-5. StatsBase        version 0.32.0
-6. QuadGK           version 2.1.0
-7. KernelDensity    version 0.5.1
-8. JLD2             version 0.1.3
+ 
 
 ## Usage
 
