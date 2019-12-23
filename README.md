@@ -78,14 +78,17 @@ The directory structure is as follows
     |-- DemoProdDeg.jl
     |-- DemoMichMent.jl
     |-- DemoSchlogl.jl
+    |-- DemoRepressilator.jl
     |-- DemoMH.jl
     |-- DemoABCMCMC.jl
     |-- DemoPMMH.jl
     |-- DemoMichMentPMCMC.jl
     |-- DemoSchloglPMCMC.jl
+    |-- DemoRepressilatorPMCMC.jl
     |-- plotParticleFilter.jl
     |-- plotMichMentMCMCconv.jl
     |-- plotSchloglMCMCconv.jl
+    |-- plotRepressilatorMCMCconv.jl
 ```
  
 
@@ -106,30 +109,30 @@ Follow these steps to run the demonstrations:
 
 The following list of examples shows how to reproduce the figures in the main paper. For more computationlly intensive examples approximate run times are given for an Intel(R) Core(TM) i7-5600U CPU (2.6 GHz).
 
-### Figure 1
-Generate figure 1
+### Figure 2
+Generate figure 2
     `julia> include("./Demonstrations/DemoProdDeg.jl")` 
 
-### Figures 2
-Generate figure 2
+### Figures 3
+Generate figure 3
     `julia> include("./Demonstrations/DemoMH.jl")` 
 
-### Figure 3
-Generate figure 3
+### Figure 4
+Generate figure 4
 For Figure 3(A)--(F)
     `julia> include("./Demonstrations/DemoABCMCMC.jl")` 
 For Figure 3(G)--(L)
     `julia> include("./Demonstrations/DemoPMMH.jl")` 
 
-### Figure 4
-Generate figure 4
-    `julia> include("./Demonstrations/plotParticleFilter.jl")` 
-
 ### Figure 5
 Generate figure 5
+    `julia> include("./Demonstrations/plotParticleFilter.jl")` 
+
+### Figure 6
+Generate figure 6
     `julia> include("./Demonstrations/DemoMichMent.jl")` 
 
-### Figure 6 and 7
+### Figure 7 and 8
 
 Generate Markov Chain trajectories (Warning: run time approx. 2 hrs) 
     `julia> include("./Demonstrations/DemoMichMentPMCMC.jl")` 
@@ -137,14 +140,26 @@ Generate Markov Chain trajectories (Warning: run time approx. 2 hrs)
 Generate figures using output data file 
     `julia> include("./Demonstrations/plotMichMentMCMCconv.jl")` 
 
-### Figure 8
-Generate figure 8
+### Figure 9
+Generate figure 9
     `julia> include("./Demonstrations/DemoSchlogl.jl")` 
 
-### Figure 9 and 10
+### Figure 10 and 11
 
 Generate Markov Chain trajectories (Warning: run time approx. 48 hrs ) 
     `julia> include("./Demonstrations/DemoSchloglPMCMC.jl")` 
 
 Generate figures using output data file 
     `julia> include("./Demonstrations/plotSchloglMCMCconv.jl")` 
+
+### Figure 12
+Generate figure 12
+    `julia> include("./Demonstrations/DemoRepressilator.jl")` 
+
+### Figure 14
+
+Generate Markov Chain trajectories (Warning: run time approx. 32 hrs ) 
+    `julia> include("./Demonstrations/DemoRepressilatorPMCMC.jl")` 
+
+Generate figures using output data file 
+    `julia> include("./Demonstrations/plotRepressilatorMCMCconv.jl")` 
