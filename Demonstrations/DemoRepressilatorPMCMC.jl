@@ -22,14 +22,16 @@ using JLD2
 Random.seed!(513)
 
 # Select the production-degradation model
-model,species,ν,a,k,x0,T = SelectBCRN("schlogl")
+model,species,ν,a,k,x0,T = SelectBCRN("repressilator")
  Δt = 0.01
 σ_obs = 10.0
 θ_true = copy(k)
-g = (X) -> X + randn(1)*σ_obs
-t_obs = [i for i=0.0:12.5:200.0]
- Y_obs = GenerateObservations(a,ν,θ_true,x0,Δt,t_obs[:],g)
- X_d = [t_obs';Y_obs]
+obs_dist = MvNormal(diagm([σ_obs^2,σ_obs^2,σ_obs^2,σ_obs^2,σ_obs^2,σ_obs^2]))
+g = (X) -> X[:] + rand(obs_dist) 
+t_obs = [i for i=0.0:5.0:100.0]
+Y_obs = GenerateObservations(a,ν,θ_true,x0,Δt,t_obs[:],g)
+ 
+X_d = [t_obs';Y_obs]
  println(X_d)
 
 # initialise RNG
@@ -49,7 +51,7 @@ function log_like_est(D,θ,N)
     end
     
     # observation error model
-    log_g = (Y,X) -> logpdf(Normal(0.0,σ_obs),Y[1] - X[1]) 
+    log_g = (Y,X) -> logpdf(obs_dist,Y - X) 
 
     t = D[1,:] # observation times
     Yt = D[2:end,:] # noisy observations
@@ -59,15 +61,17 @@ function log_like_est(D,θ,N)
 end
 
 # prior
-lower = [0.0,0.0,0.0,0.0]
-upper = [5.4e-1,7.5e-4,6.6e3,1.125e2]
+lower = [500.0,0.0,0.0,0.0]
+upper = [2500.0,10.0,20.0,10.0]
 prior_dist = Product(Uniform.(lower,upper))
 log_prior = (θ) -> logpdf(prior_dist,θ) # log p(K), where p(k) = 1/(b-a)
 
 # Bootstrap particle filter Monte Carlo estimator of target log density 
 log_πhat = (θ,N) -> (isinf(log_prior(θ))) ? -Inf : log_prior(θ) + log_like_est(X_d,θ,N) 
 
-N = 100
+
+N = 400
+n = 1000
 
 function initθ(M)
     θ0 = rand(prior_dist,M)
@@ -75,7 +79,7 @@ function initθ(M)
     while i <= M
         ll = log_πhat(θ0[:,i],N)
         println(ll)
-        if isinf(ll) == false
+        if ll >= -800.0
             i += 1
         else
             θ0[:,i] = rand(prior_dist,1)
@@ -87,37 +91,34 @@ end
 
 θ0 = initθ(4)
 
-@time println(log_πhat(θ0[:,1],N))
-@time println(log_πhat(θ0[:,2],N))
-@time println(log_πhat(θ0[:,3],N))
-@time println(log_πhat(θ0[:,4],N))
-
-#trial iterations using naive proposal
 # proposal pdf
 Σ = diagm(diag(cov(prior_dist)/100.0))
-println(Σ)
 q_dist = MvNormal(Σ)
 q_sim = (θ) -> rand(q_dist) + θ
 log_q_pdf = (θp,θ) -> logpdf(q_dist,θp-θ)
 
-n = 20000
+# trial iterations using a naive proposal 
+n = 5000
 @time θ_t1 = PseudoMarginalMetropolisHastings(log_πhat, log_q_pdf,q_sim,θ0[:,1],N,0,n)
 @time θ_t2 = PseudoMarginalMetropolisHastings(log_πhat, log_q_pdf,q_sim,θ0[:,2],N,0,n)
 @time θ_t3 = PseudoMarginalMetropolisHastings(log_πhat, log_q_pdf,q_sim,θ0[:,3],N,0,n)
 @time θ_t4 = PseudoMarginalMetropolisHastings(log_πhat, log_q_pdf,q_sim,θ0[:,4],N,0,n)
-@save "schlogl.jdl" θ_t1 θ_t2 θ_t3 θ_t4
+@save "repressilator.jdl" θ_t1 θ_t2 θ_t3 θ_t4
 
-pooled_θ = hcat(θ_t1,θ_t2,θ_t3,θ_t4)
+pooled_θ = hcat(θ_t1[:,1:5000],θ_t2[:,1:5000],θ_t3[:,1:5000],θ_t4[:,1:5000])
 Σ_hat = cov(pooled_θ')
 println(Σ_hat)
 Σ_opt = (((2.38)^2)/4.0)*Σ_hat; 
+
 q_dist = MvNormal(Σ_opt)
 q_sim = (θ) -> rand(q_dist) + θ
 log_q_pdf = (θp,θ) -> logpdf(q_dist,θp-θ)
+Random.seed!(521)
+
 n = 5000
-for ii in 1:48
+for ii in 1:16
     # try MCMC with Pseudo-Marginal Metropolis-Hastings
-    @load "schlogl.jdl" θ_t1 θ_t2 θ_t3 θ_t4
+    @load "repressilator.jdl" θ_t1 θ_t2 θ_t3 θ_t4
     # deepcopy 
     θpre_t1 = deepcopy(θ_t1)
     θpre_t2 = deepcopy(θ_t2)
@@ -132,12 +133,12 @@ for ii in 1:48
     θ_t2 = hcat(θpre_t2,θ_t2)
     θ_t3 = hcat(θpre_t3,θ_t3)
     θ_t4 = hcat(θpre_t4,θ_t4)
-    @save "schlogl.jdl" θ_t1 θ_t2 θ_t3 θ_t4
-    R,W,V,S = rnRhat([θ_t1[:,20001:end],θ_t2[:,20001:end],θ_t3[:,20001:end],θ_t4[:,20001:end]])
+    @save "repressilator.jdl" θ_t1 θ_t2 θ_t3 θ_t4 
+    R,W,V,S = rnRhat([θ_t1[:,5001:end],θ_t2[:,5001:end],θ_t3[:,5001:end],θ_t4[:,5001:end]])
     println(R)
     println(S)
 end
-@load "schlogl.jdl" θ_t1 θ_t2 θ_t3 θ_t4
+@load "repressilator.jdl" θ_t1 θ_t2 θ_t3 θ_t4
 
 h = figure()
 subplot(221)
