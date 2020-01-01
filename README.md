@@ -18,7 +18,7 @@ Google Scholar: (https://scholar.google.com.au/citations?user=t8l-kuoAAAAJ&hl=en
 This code is provided as supplementary information to the paper,
 
 David J Warne, Ruth E Baker, and Matthew J Simpson. A practical guide to 
-pseudo-marginal methods for computational inference in systems biology. ArXiv pre-print, [TBA](www.arxiv.org). 
+pseudo-marginal methods for computational inference in systems biology. ArXiv pre-print, [arXiv:1912.12404 [q-bio.MN]](https://arxiv.org/abs/1912.12404). 
 
 ## Licensing
 This source code is licensed under the GNU General Public License Version 3.
