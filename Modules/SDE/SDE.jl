@@ -15,7 +15,7 @@ module SDE
 using LaTeXStrings
 using LinearAlgebra
 
-export EulerMaruyama
+export Euler_Maruyama
 export SimulateCLE
 export SelectBCRN
 export GenerateObservations
